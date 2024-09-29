@@ -1,1 +1,1 @@
-# Settinu up Raspberry pi
+# Setting up Raspberry pi
