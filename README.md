@@ -35,7 +35,7 @@
     * Usage: `$ python3 seg.py <port>`
 - What I've learned:
     * cross compile set up in Makefile.
-    * Uniform API which is defined in /include/linux/fs.h.
+    * Uniform APIs which are defined in /include/linux/fs.h.
     * basic driver.c structure and compile into .ko file.
     * Copy_from_user(), Copy_to_user()
     * driver table, device table
