@@ -26,10 +26,15 @@
     * `dmesg` to see any information for kernel info.
     * `ls -l /dev` to see if device node created or not.
     * `echo "A">/dev/my_device` for testing. You should see more information after `dmesg`. 
-- Writer
-    * Usage: `./Writer <name>` 
-- Reader
-    * Usage: `./Reader <server ip> <port> </dev/my_device>
+- writer
+    * Usage: `./writer <name>` 
+- reader
+    * Usage: `./reader <server ip> <port> </dev/my_device>`
 - seg.py
-    * Usage: `python3 seg.py <port>
-
+    * Usage: `python3 seg.py <port>`
+- What I've learned
+    * cross compile set up in Makefile.
+    * Uniform API which is defined in /include/linux/fs.h.
+    * basic driver.c structure and compile into .ko file.
+    * Copy_from_user(), Copy_to_user()
+    * driver table, device table
