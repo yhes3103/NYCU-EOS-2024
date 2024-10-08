@@ -1,5 +1,5 @@
 # NYCU-EOS-2024
-    These are records of my codes, report and what I've learned in NYCU Embedded Operating System. 
+    These are records of my codes, reports and what I've learned in NYCU Embedded Operating System. 
 ## Pretest
 - Only those who pass the pretest can take this course.
 ## Lab1
