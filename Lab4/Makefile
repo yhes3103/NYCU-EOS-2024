@@ -1,9 +1,9 @@
-obj-m := my_driver.o
+obj-m := mydevr.o
 
 all: RPI_build
 clean: RPI_clean
 
-RPI_build: my_driver.c
+RPI_build: mydev.c
 	sudo make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C $(PWD) M=$(shell pwd) modules
  
 RPI_clean:

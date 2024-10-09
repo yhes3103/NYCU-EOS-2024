@@ -19,18 +19,20 @@
 - Create kernel object(.ko) then insert module.
     * make sure you've already set the `$(PWD)` to the correct file. In my case, `& PWD=/home/wang/linux`.
     * `$ make` with Makefile
-- `$ scp my_driver.ko pi@ipaddr:~/` to send .ko file to Rpi.
+- `$ scp mydev.ko pi@ipaddr:~/` to send .ko file to Rpi.
 - Insert module and create device node.
-    * `& sudo insmod my_driver` and `sudo rmmod my_driver.ko` to insert and remove.
+    * `& sudo insmod mydev.ko` and `sudo rmmod mydev.ko` to insert and remove.
     * `& sudo mknod /dev/my_device c 255 0` to make device node. c stands for character device, 255 and 0 for major num and minor num.
     * `& sudo rm /dev/my_device` to delete device node.
     * `& dmesg` to see any information for kernel info.
     * `& ls -l /dev` to see if device node created or not.
     * `& echo "A">/dev/my_device` for testing. You should see more information after `dmesg`. Make sure you have sufficient permissions to read and write, if not, use `$ sudo chmod 666 /dev/my_device`
-- writer
+- writer.c
     * Usage: `$ ./writer <name>` 
-- reader
+- reader.c
     * Usage: `$ ./reader <server ip> <port> </dev/my_device>`
+- run reader and writer at the same time.
+    * `sudo ./demo.sh` to run reader and writer at the same time.
 - seg.py
     * Usage: `$ python3 seg.py <port>`
 - What I've learned:

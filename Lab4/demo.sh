@@ -5,6 +5,7 @@ set -x #prints each command and its arguments to the terminal before executing i
 
 rmmod -f mydev
 insmod mydev.ko
+mknod /dev/my_device c 255 0
 
-./writer STUNAME & #run in subshell
-./reader 192.168.2.101 8000 /dev/mydev
+./writer 'Devon' & #run in subshell
+./reader 192.168.0.22 8888 /dev/my_device

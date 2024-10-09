@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <fcntl.h>
-#include <unistd.h> // for sleep funciton
+#include <unistd.h> 
 #include <string.h>
 #include <stdlib.h>
 
@@ -23,7 +23,6 @@ int main(int argc,char *argv[]) {
     int length = strlen(argv[1]);
     printf("Write %ld bytes to the device: %s\n", length, argv[1]);
 
-    sleep(3);
     for (int i = 0 ; i < length ; i++){
         ssize_t bytes_written = write(fd, &argv[1][i], 1);
         if (bytes_written == -1) {
