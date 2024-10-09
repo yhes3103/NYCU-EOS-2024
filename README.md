@@ -37,10 +37,11 @@
     * Usage: `$ python3 seg.py <port>`
 - What I've learned:
     * cross compile set up in Makefile.
-    * Uniform APIs which are defined in /include/linux/fs.h.
+    * uniform APIs which are defined in /include/linux/fs.h.
     * basic driver.c structure and compile into .ko file.
     * Copy_from_user(), Copy_to_user()
     * driver table, device table
 - Notes:
     * A major number is a unique identifier assigned to a device driver in the Linux kernel. On the other hands, A minor number is a smaller identifier that is used in conjunction with the major number to uniquely identify a specific device within a class of devices. For example, mojor number for a disk driver is 8, minor number for /dev/sda, /dev/sdb, /dev/sdc is 0, 1, 2.
+    * To create more devices from the same driver, just `mknod`. For example, `mknod /dev/my_device1 c 255 0` and `mknod /dev/my_device2 c 255 1` to create different device instances.
 
