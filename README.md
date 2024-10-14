@@ -13,6 +13,28 @@
     * Q1: Shrink the size of your kernel image. 
     * Q2: Benchmark your kernel, revise it, and improve its performance. Rerun the benchmark to prove your performance. 
     * Q3: Patch your kernel to support real-time tasks.  
+## Lab3
+- This lab is about creating my own driver based on GPIO driver.
+- It's suggested that you check Lab 4 first, as I completed it earlier. More details are recorded there.
+- Notes:
+    Here are some basic GPIO commands.
+    * Each GPIOs imformaiton are under /sys/class/gpio, you should see those GPIOs which have been exported.
+    * `& echo 17 > /sys/class/gpio/export` to export GPIO17 for example. Use `&ls` to check.
+    * `& echo "out" > /sys/class/gpio/gpio17/direction` to make gpio17 output mode.
+    * `& echo 1 > /sys/class/gpio/gpio17/value` to set value.
+    * `& cat /sys/class/gpio/gpio17/value` to see the value of GPIO17.
+    # Lab3-1
+    - `& sudo insmod lab3-1_driver.ko` to insert kernel object.
+    - `& ls -l /dev` to check whether the device has been created or not. For more imformation, use `& dmesg|tail`.
+    - `& sudo chmod 777 /dev/etx_device` as I name my driver etx_device.
+    - lab3-1_writer.c
+        * Usage: `$ ./lab3-1_writer <student ID>` 
+    # Lab3-2
+    - `& sudo insmod lab3-2_driver.ko` to insert kernel object.
+    - `& ls -l /dev` to check whether the device has been created or not. For more imformation, use `& dmesg|tail`.
+    - `& sudo chmod 777 /dev/seg_device` as I name my driver seg_device.
+    - lab3-2_writer.c
+        * Usage: `$ ./lab3-2_writer <student ID>` 
 ## Hw1
 ## Lab4
 - This lab is about creating my driver.
