@@ -9,35 +9,28 @@
 #include <linux/delay.h> 
 #include <linux/uaccess.h>  //copy_to/from_user() 
 #include <linux/gpio.h>     //GPIO 
-//#include <stdarg.h>
+
   
 //LED is connected to this GPIO 
-#define COUNT 8
+#define COUNT 4
 #define GPIO_21 (21) // MSB
 #define GPIO_20 (20) 
 #define GPIO_16 (16) 
-#define GPIO_12 (12) 
-#define GPIO_1 (1) 
-#define GPIO_7 (7) 
-#define GPIO_8 (8) 
-#define GPIO_25 (25) // LSB
+#define GPIO_12 (12) // LSB
+
   
 dev_t dev = 0; 
-static int gpios[COUNT] = {GPIO_21, GPIO_20, GPIO_16, GPIO_12, GPIO_1, GPIO_7, GPIO_8, GPIO_25};
+static int gpios[COUNT] = {GPIO_21, GPIO_20, GPIO_16, GPIO_12};
 static struct class *dev_class; 
 static struct cdev etx_cdev; 
   
 static int __init etx_driver_init(void); 
 static void __exit etx_driver_exit(void); 
-void set_gpios(int a,int b, int c, int d, int e, int f, int g, int h){
+void set_gpios(int a,int b, int c, int d){
     gpio_set_value(GPIO_21, a);
     gpio_set_value(GPIO_20, b);
     gpio_set_value(GPIO_16, c);
     gpio_set_value(GPIO_12, d);
-    gpio_set_value(GPIO_1, e);
-    gpio_set_value(GPIO_7, f);
-    gpio_set_value(GPIO_8, g);
-    gpio_set_value(GPIO_25, h);
 }
   
   
@@ -97,7 +90,7 @@ static ssize_t etx_read(struct file *filp,
     pr_err("ERROR: Not all the bytes have been copied to user\n"); 
   } 
    
-  pr_info("Read function : GPIO states = [%d, %d, %d, %d, %d, %d, %d, %d] \n", gpio_states[0],gpio_states[1], gpio_states[2], gpio_states[3], gpio_states[4], gpio_states[5], gpio_states[6], gpio_states[7] ); 
+  pr_info("Read function : GPIO states = [%d, %d, %d, %d] \n", gpio_states[0],gpio_states[1], gpio_states[2], gpio_states[3]); 
    
   return 0; 
 } 
@@ -114,28 +107,28 @@ static ssize_t etx_write(struct file *filp,
     pr_err("ERROR: Not all the bytes have been copied from user\n"); 
   } 
    
-  pr_info("Write Function : GPIO_21 Set = %c\n", rec_buf[0]); 
+  pr_info("Write Function : %c\n", rec_buf[0]); 
    
   if (rec_buf[0]=='0') { 
-    set_gpios(0, 0, 0, 0, 0, 0, 0, 0); 
+    set_gpios(0, 0, 0, 0); 
   } else if (rec_buf[0]=='1') { 
-    set_gpios(0, 0, 0, 0, 0, 0, 0, 1); 
+    set_gpios(0, 0, 0, 1); 
   } else if (rec_buf[0]=='2') { 
-    set_gpios(0, 0, 0, 0, 0, 0, 1, 0); 
+    set_gpios(0, 0, 1, 0); 
   } else if (rec_buf[0]=='3'){
-    set_gpios(0, 0, 0, 0, 0, 0, 1, 1); 
+    set_gpios(0, 0, 1, 1); 
   } else if (rec_buf[0]=='4'){
-    set_gpios(0, 0, 0, 0, 0, 1, 0, 0); 
+    set_gpios(0, 1, 0, 0); 
   } else if (rec_buf[0]=='5'){
-    set_gpios(0, 0, 0, 0, 0, 1, 0, 1); 
+    set_gpios(0, 1, 0, 1); 
   } else if (rec_buf[0]=='6'){
-    set_gpios(0, 0, 0, 0, 0, 1, 1, 0); 
+    set_gpios(0, 1, 1, 0); 
   } else if (rec_buf[0]=='7'){
-    set_gpios(0, 0, 0, 0, 0, 1, 1, 1); 
+    set_gpios(0, 1, 1, 1); 
   } else if (rec_buf[0]=='8'){
-    set_gpios(0, 0, 0, 0, 1, 0, 0, 0); 
+    set_gpios(1, 0, 0, 0); 
   } else if (rec_buf[0]=='9'){
-    set_gpios(0, 0, 0, 0, 1, 0, 0, 1); 
+    set_gpios(1, 0, 0, 1); 
   }
    
   return len; 
