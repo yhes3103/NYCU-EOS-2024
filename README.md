@@ -36,6 +36,19 @@
     - lab3-2_writer.c
         * Usage: `$ ./lab3-2_writer <student ID>` 
 ## Hw1
+- In this homework, I will create seg_driver and led_driver.
+- Create kernel object
+    * make sure you've already set the `$(PWD)` to the correct file. In my case, `& PWD=/home/wang/linux`.
+    * `$ make` with Makefile
+    * `$ scp <xxxxxx>.ko pi@ipaddr:~/` to send .ko file to Rpi.
+- Insert module in Rpi
+    * `& sudo insmod led_driver.ko` and `& sudo insmod seg_driver.ko` to insert module.
+    * `& sudo chmod 777 /dev/led_device` and `& sudo chmod 777 /dev/led_device` to change usage permission.
+- Hw1_app.c
+    * This is the main application.
+    * `& ./Hw1_app` to run the main program.
+
+
 ## Lab4
 - This lab is about creating my driver.
 - Create kernel object(.ko) then insert module.
