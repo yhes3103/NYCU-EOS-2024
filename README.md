@@ -16,7 +16,7 @@
 ## Lab3
 - This lab is about creating my own driver based on GPIO driver.
 - It's suggested that you check Lab 4 first, as I completed it earlier. More details are recorded there.
-- Notes:
+- Notes:  
     Here are some basic GPIO commands.
     * Each GPIOs imformaiton are under /sys/class/gpio, you should see those GPIOs which have been exported.
     * `& echo 17 > /sys/class/gpio/export` to export GPIO17 for example. Use `&ls` to check.
