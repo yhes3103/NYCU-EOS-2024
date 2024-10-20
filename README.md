@@ -1,18 +1,22 @@
 # NYCU-EOS-2024
     These are records of my codes, reports and what I've learned in NYCU Embedded Operating System. 
+
 ## Pretest
 - Only those who pass the pretest can take this course.
+
 ## Lab1
 - This lab is about setting up environment on Raspberry Pi.
 - What I've learned:
     * NAT
     * Bridge
+
 ## Lab2
 - This lab is about Building kernel.
 - We are required to meet the goals.
     * Q1: Shrink the size of your kernel image. 
     * Q2: Benchmark your kernel, revise it, and improve its performance. Rerun the benchmark to prove your performance. 
     * Q3: Patch your kernel to support real-time tasks.  
+
 ## Lab3
 - This lab is about creating my own driver based on GPIO driver.
 - It's suggested that you check Lab 4 first, as I completed it earlier. More details are recorded there.
@@ -35,6 +39,7 @@
     - `& sudo chmod 777 /dev/seg_device` as I name my driver seg_device.
     - lab3-2_writer.c
         * Usage: `$ ./lab3-2_writer <student ID>` 
+
 ## Hw1
 - In this homework, I will create seg_driver and led_driver.
 - Create kernel object
@@ -47,7 +52,6 @@
 - Hw1_app.c
     * This is the main application.
     * `& ./Hw1_app` to run the main program.
-
 
 ## Lab4
 - This lab is about creating my driver.
@@ -67,7 +71,7 @@
 - reader.c
     * Usage: `$ ./reader <server ip> <port> </dev/my_device>`
 - run reader and writer at the same time.
-    * `sudo ./demo.sh` to run reader and writer at the same time.
+    * `$ sudo ./demo.sh` to run reader and writer at the same time.
 - seg.py
     * Usage: `$ python3 seg.py <port>`
 - What I've learned:
@@ -80,3 +84,20 @@
     * A major number is a unique identifier assigned to a device driver in the Linux kernel. On the other hands, A minor number is a smaller identifier that is used in conjunction with the major number to uniquely identify a specific device within a class of devices. For example, mojor number for a disk driver is 8, minor number for /dev/sda, /dev/sdb, /dev/sdc is 0, 1, 2.
     * To create more devices from the same driver, just `mknod`. For example, `mknod /dev/my_device1 c 255 0` and `mknod /dev/my_device2 c 255 1` to create different device instances.
 
+## Lab5
+- This lab is about processes and threads.
+- Make sure you have downloaded "sl" and "tmux". Use `$ sudo apt install sl tmux`.
+- To run the lab5 program, use `$ sudo ./demo.sh`. Use `Ctrl+B` and `:kill-session` to close the session.
+- To check if any zombie processes left or not, use `$ ps aux | grep defunct | grep -v grep`.
+- What I've learned:  
+    🌟 For more details, you are recommanded to take a look at "Lab5_report.pdf".
+    * Processes
+        - fork(): child process "inherits" all resources from the parent process, pid() and ppid().
+        - harvest: How parent process receive value from child process with wait() and waitpid().Otherwise, there might be a zombie process.
+        - nice(): Use for priority of a process.
+        - exec() 
+        - zombie process
+    * Threads
+        - master thread and worker thread
+        - pthread_create()
+        - attach and detach. Beware of pointer type.
