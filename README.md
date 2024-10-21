@@ -87,7 +87,7 @@
 ## Lab5
 - This lab is about processes and threads.
 - Make sure you have downloaded "sl" and "tmux". Use `$ sudo apt install sl tmux`.
-- To run the lab5 program, use `$ sudo ./demo.sh`. Use `Ctrl+B` and `:kill-session` to close the session.
+- To run the lab5 program, use `$ ./demo.sh`. Use `Ctrl+B` and `:kill-session` to close the session.
 - To check if any zombie processes left or not, use `$ ps aux | grep defunct | grep -v grep`.
 - What I've learned:  
     🌟 For more details, you are recommanded to take a look at "Lab5_report.pdf".

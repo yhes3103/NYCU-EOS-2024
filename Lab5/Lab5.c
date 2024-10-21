@@ -24,6 +24,7 @@
 void zombie_handler(int signum) {
     while (waitpid(-1, NULL, WNOHANG) > 0);
 }
+
 int server_fd;
 /* Use for closing socket when catching SIGINT(Ctrl+C) signal*/
 void sigint_handler(int signum) {
@@ -85,20 +86,28 @@ int main(int argc, char* argv[]){
 
         /* create child process to handle connection*/
         pid_t pid = fork();
+
+        /*
+        The key point is:
+        when fork() creates a child process, the child process "inherits" all resources from the parent process, 
+        including the file descriptor client_fd. This allows the child process to communicate with the client independently.
+        
+        in child process, after redirect the output to client_fd, child process no longer needs client_fd, so it uses close(client_fd)
+        
+        */
         if (pid == 0){
             /* redirect output to client socket */
-
             dup2(client_fd, STDOUT_FILENO);
             close(client_fd);
             int child_pid = getpid();
-            printf("Child ID: %d\n", child_pid);
+            printf("Train ID: %d\n", child_pid);
             fflush(stdout);
             execlp("sl",  "sl", "-l", NULL);
             perror("Error execlp");
             exit(EXIT_FAILURE); 
         }else if(pid > 0){
             /* for parent process */
-            printf("Child process created with PID: %d\n", pid);
+            printf("Train ID: %d\n", pid);
             close(client_fd);
         }else{
             perror("fork failed");
