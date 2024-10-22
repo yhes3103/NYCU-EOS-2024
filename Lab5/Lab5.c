@@ -20,70 +20,76 @@
 #include <sys/socket.h> // socket()
 #include <arpa/inet.h>  // sockaddr
 
+int server_fd;
+
 /* Use for killing Zombie process */
 void zombie_handler(int signum) {
     while (waitpid(-1, NULL, WNOHANG) > 0);
 }
 
-int server_fd;
-/* Use for closing socket when catching SIGINT(Ctrl+C) signal*/
-void sigint_handler(int signum) {
+/* Close socket when catching SIGINT signal ( Signal Interrupt such as Ctrl + C ) */
+void server_handler(int signum) { 
     close(server_fd);
-    exit(0);
 }
-
-
 
 int main(int argc, char* argv[]){
 
-    if(argc != 2) {
-        fprintf(stderr, "Usage: ./lab5 <port>\n");
-        exit(EXIT_FAILURE);
-    }
-
     /* Whenever child process terminates, a SIGCHILD signal received form child, 
     it will run zombie_handler to wait for every child process and clean them */
-    signal(SIGCHLD, zombie_handler); 
-    signal(SIGINT, sigint_handler);
-    
-    server_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (server_fd < 0){
-        perror("Error opening socket");
+    signal(SIGCHLD, zombie_handler);
+    signal(SIGINT, server_handler);
+
+    if (argc != 2){
+        printf("Usage: ./lab5 <port>\n");
+        exit(EXIT_FAILURE);
+        /*
+            exit(return value)
+            if return value is 0 means success
+            nonzero means error
+            in general, EXIT_FAILURE equals to 1
+        */
+    }
+
+
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        perror("Socket creation failed");
         exit(EXIT_FAILURE);
     }
 
-    /* Force using socket address already in use */
-    int yes = 1;
-    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
-
-    /* struct sockaddr_in info */
+    /* setting sockaddr_in  */
     struct sockaddr_in address;
-    socklen_t addrlen = sizeof(address); 
+    socklen_t addrlen = sizeof(address);
     int port = atoi(argv[1]);
 
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(port);
 
+    /* force using socket address already in use */
+    int yes = 1;
+    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
+
+    // start binding
     if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
-        perror("bind failed");
+        perror("Server binding failed");
         exit(EXIT_FAILURE);
     }
 
-    /* start binding */
-    if (listen(server_fd, 5) < 0) {
-        perror("listen");
+    // start listening
+    if (listen(server_fd, 3) < 0) {
+        perror("Server listening failed");
         exit(EXIT_FAILURE);
     }
-    printf("Server is listening to %d\n", port);
+    printf("Server is now listening...\n");
 
     while(1){
         /* accepting new connection */
-        int client_fd = accept(server_fd, (struct sockaddr *)&address, &addrlen);
-        if(client_fd < 0){
-            perror("Error accepting connection");
-        }
+        int client_fd =accept(server_fd, (struct sockaddr *)&address, &addrlen);
+        if (client_fd < 0){
+            perror("Accepting client failed");
 
+        }
+        
         /* create child process to handle connection*/
         pid_t pid = fork();
 
@@ -95,24 +101,33 @@ int main(int argc, char* argv[]){
         in child process, after redirect the output to client_fd, child process no longer needs client_fd, so it uses close(client_fd)
         
         */
-        if (pid == 0){
-            /* redirect output to client socket */
-            dup2(client_fd, STDOUT_FILENO);
-            close(client_fd);
+
+        if (pid == -1){
+            perror("Fork failed");
+            exit(EXIT_FAILURE);
+        }else if (pid == 0){
+            /* Here are the child codes */
+            if (dup2(client_fd, STDOUT_FILENO) < 0) {
+                perror("Dup2 failed");
+                return 1;
+            }
+            close(server_fd);
+
             int child_pid = getpid();
             printf("Train ID: %d\n", child_pid);
-            fflush(stdout);
-            execlp("sl",  "sl", "-l", NULL);
-            perror("Error execlp");
-            exit(EXIT_FAILURE); 
-        }else if(pid > 0){
-            /* for parent process */
-            printf("Train ID: %d\n", pid);
-            close(client_fd);
+
+            if(execlp("sl", "sl", "-l", NULL) <0 ){
+                perror("Execlp failed");
+                exit(EXIT_FAILURE);
+            }
         }else{
-            perror("fork failed");
+            /* Happens when pid > 0 */
+            /* Here are the parent codes */
+            printf("Train ID: %d\n", pid); // child pid
+            close(client_fd);
         }
     }
 
     return 0;
+
 }
