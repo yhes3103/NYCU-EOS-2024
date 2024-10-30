@@ -3,9 +3,36 @@
 #include <fcntl.h> // file control, use for open, O_RDONLY
 #include <stdlib.h> // use for malloc, free, rand, exit
 #include <string.h> // use for string functions
+#include <termios.h> // change input mode
+
 
 #define DEVICE_LED "/dev/led_device"
 #define DEVICE_SEG "/dev/seg_device"
+static struct termios stored_settings;
+
+void set_keypress (void)
+{
+  struct termios new_settings;
+
+  tcgetattr (0, &stored_settings);
+
+  new_settings = stored_settings;
+
+  /* Disable canonical mode, and set buffer size to 1 byte */
+  new_settings.c_lflag &= (~ICANON);
+  new_settings.c_cc[VTIME] = 0;
+  new_settings.c_cc[VMIN] = 1;
+
+  tcsetattr (0, TCSANOW, &new_settings);
+  return;
+}
+
+void reset_keypress (void)
+{
+  tcsetattr (0, TCSANOW, &stored_settings);
+  return;
+}
+
 
 void write_seg_device(int total_cost){
     int fd = open(DEVICE_SEG, O_WRONLY);
@@ -26,6 +53,8 @@ void write_seg_device(int total_cost){
         }
         usleep(500000);
     }
+    char x = 'x';   /////////////////////////////////////////////////////////////
+    write(fd, &x, 1); // stop displaying any digit
     close(fd);
 }
 
@@ -35,9 +64,9 @@ void write_led_device(int distance){
         perror("Failed to open the device");
         return; // Return instead of EXIT_FAILURE
     }
-char data[10] = {'9', '8', '7', '6', '5', '4', '3', '2', '1', '0'};
-    
 
+char data[10] = {'9', '8', '7', '6', '5', '4', '3', '2', '1', '0'};
+ 
 for (int i = 9 - distance; i <= 9; i++) {
     ssize_t bytes_written = write(fd, &data[i], 1);
     // printf("Writing '%c' to LED device\n", data[i]);
@@ -79,7 +108,11 @@ void order(char* shop_name, char* item1, char* item2, int price1, int price2, in
         } else if (order_choice == 3) {
             if (*order1 == 0 && *order2 == 0) {
                 printf("Nothing to order\n");
+                set_keypress();
+                printf("<!-- 按任意鍵回主選單 -->\n");
                 getchar(); // Use getchar to pause
+                getchar();
+                reset_keypress();
                 system("clear");
                 break;
             }
@@ -88,7 +121,6 @@ void order(char* shop_name, char* item1, char* item2, int price1, int price2, in
             printf("%s: %d \n", item2, *order2);
             int total_cost = price1 * (*order1) + price2 * (*order2);
             printf("Total cost: %d\n", total_cost);
-            write_seg_device(total_cost);
             if (strcmp(shop_name, "Dessert Shop") == 0) {
                 write_led_device(3);
             } else if (strcmp(shop_name, "Beverage Shop") == 0) {
@@ -96,6 +128,7 @@ void order(char* shop_name, char* item1, char* item2, int price1, int price2, in
             } else if (strcmp(shop_name, "Diner") == 0) {
                 write_led_device(8);
             }
+            write_seg_device(total_cost);
 
             *order1 = 0; // set to 0 after delivery
             *order2 = 0;
@@ -134,9 +167,11 @@ int main() {
             printf("Dessert shop: 3km\n");
             printf("Beverage shop: 5km\n");
             printf("Diner: 8km\n");
+            set_keypress();
             printf("<!-- 按任意鍵回主選單 -->\n");
             getchar(); // Use getchar to pause
             getchar();
+            reset_keypress();
             system("clear");
         } else if (menuchoice == 2) {
             system("clear");
@@ -159,6 +194,15 @@ int main() {
                 getchar(); // Use getchar to pause
                 system("clear");
             }
+        }else{
+            printf("Invalid input, please choose again: ");
+            set_keypress();
+            system("clear");
+            printf("\n<!-- 按任意鍵回主選單 -->\n");
+            getchar(); // Use getchar to pause
+            getchar();
+            reset_keypress();
+            system("clear");
         }
     }
 }

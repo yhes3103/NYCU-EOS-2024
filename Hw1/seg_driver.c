@@ -109,7 +109,7 @@ static ssize_t etx_read(struct file *filp,
 static ssize_t etx_write(struct file *filp,  
                 const char __user *buf, size_t len, loff_t *off) 
 { 
-  uint8_t rec_buf[2] = {0}; 
+  char rec_buf[2] = {0}; 
    
   if( copy_from_user( rec_buf, buf, len ) > 0) { 
     pr_err("ERROR: Not all the bytes have been copied from user\n"); 
@@ -137,6 +137,8 @@ static ssize_t etx_write(struct file *filp,
     set_gpios(1, 1, 1, 1, 1, 1, 1, 0); 
   } else if (rec_buf[0]=='9'){
     set_gpios(1, 1, 1, 1, 0, 1, 1, 0); 
+  } else{
+    set_gpios(0, 0, 0, 0, 0, 0, 0, 0);
   }
    
   return len; 

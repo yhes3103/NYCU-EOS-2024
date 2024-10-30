@@ -134,7 +134,7 @@ static ssize_t etx_write(struct file *filp,
   } else if (rec_buf[0]=='7'){
     set_gpios(0, 1, 1, 1, 1, 1, 1, 1); 
   } else if (rec_buf[0]=='8'){
-    set_gpios(0, 1, 1, 1, 1, 1, 1, 1); 
+    set_gpios(1, 1, 1, 1, 1, 1, 1, 1); 
   } 
    
   return len; 
