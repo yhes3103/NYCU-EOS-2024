@@ -92,16 +92,13 @@ int main(int argc, char* argv[]){
         
         /* create child process to handle connection*/
         pid_t pid = fork();
-
         /*
         The key point is:
         when fork() creates a child process, the child process "inherits" all resources from the parent process, 
         including the file descriptor client_fd. This allows the child process to communicate with the client independently.
         
         in child process, after redirect the output to client_fd, child process no longer needs client_fd, so it uses close(client_fd)
-        
         */
-
         if (pid == -1){
             perror("Fork failed");
             exit(EXIT_FAILURE);
