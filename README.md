@@ -107,3 +107,11 @@
 ## Hw2
 - Use `$ ./Hw2_app <port>` to run with the program hw2_checker
 - `$ hw2_checker <ip> <port>`
+
+## Lab6
+- Lab6_server.c
+    - Usage `$ ./server <port>`
+- Lab6_client.c
+    - Usage `$ ​​​​./client <ip> <port> <deposit/withdraw> <amount> <times>`
+- demo.sh
+    - Use `$ demo.sh` to run the program
