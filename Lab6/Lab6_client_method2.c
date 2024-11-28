@@ -1,8 +1,8 @@
 # include <stdio.h>
 # include <unistd.h> // for fork() exec() read() close() lseek() dup() ...
 # include <stdlib.h>
-# include <netinet/in.h>  // sockaddr_in, htons, INADDR_ANY
-# include <arpa/inet.h>   // htons, inet_ntoa
+#include <netinet/in.h>  // sockaddr_in, htons, INADDR_ANY
+#include <arpa/inet.h>   // htons, inet_ntoa
 # include <sys/socket.h> // for socket
 # include <sys/sem.h> // for semaphore
 # include <string.h>
@@ -33,17 +33,9 @@ int main(int argc, char* argv[]){
     if(connect(server_fd,(struct sockaddr *)&address, addrlen) < 0){
         printf("Connection error\n");
     }
-    int times = atoi(argv[5]);
-    sprintf(send_buf, "%s %s", argv[3], argv[4]);
 
-    for(int i = 0; i < times; i++){
-        usleep(500);
-        send(server_fd, send_buf, 50, 0);
-    }
-
-
-    //sprintf(send_buf, "%s %s %s", argv[3], argv[4], argv[5]);
-    //send(server_fd, send_buf, 50, 0);
+    sprintf(send_buf, "%s %s %s", argv[3], argv[4], argv[5]);
+    send(server_fd, send_buf, 50, 0);
 
     return 0;
 
