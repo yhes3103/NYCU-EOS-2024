@@ -115,3 +115,11 @@
     - Usage `$ ​​​​./client <ip> <port> <deposit/withdraw> <amount> <times>`
 - demo.sh
     - Use `$ demo.sh` to run the program
+- Note:
+    - There are two versions, the first method involves parsing times on the client side, which sends out 500 packets. The second method parses times on the server side, where the server runs a loop to handle deposits and withdrawals. The results(./demo.sh) from the first method are more interleaved, while the results from the second method are more organized.
+
+## Lab7
+- game.c
+    - Usage `$ ./game <shm key> <guess>`
+- guess.c
+    - Usage `$ ./game <shm key> <Upper bound> <game's PID>`    
